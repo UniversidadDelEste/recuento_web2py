@@ -17,7 +17,7 @@ response.meta.keywords = 'elecciones recuento resultado carga definitivo'
 
 response.menu = [
     (T('Index'), False, URL(request.application,'default','index'), []),
-    (T('Consultas'), False, URL(request.application,'definitivo','listado'), []),
+    (T('Consultas'), False, URL(request.application,'definitivo','index'), []),
     (T('Resultado'), False, URL(request.application,'resultado','index'), []),
     (T('Subir Telegrama'), False, URL(request.application, 'telegrama','subir'), []),
     ]
