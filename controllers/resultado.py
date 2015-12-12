@@ -1,4 +1,5 @@
 # coding: utf8
+import StringIO
 
 def index():
     "Página inical de búsqueda"
@@ -187,6 +188,7 @@ def reporte():
         cargo=cargo,
         partido=partido,
 	chart=chart,
+	my_args=request.args
         )
 
 
@@ -272,3 +274,12 @@ def calcula_dhont_electos(votos, total, piso, bancas, candidatos=None):
         resultado[None] = bancas
     
     return (resultado, electos)
+
+
+def exportar():
+    data=reporte()
+    rows = data['tabla_resultado']
+    s = StringIO.StringIO()
+    rows.export_to_csv_file(s)
+    response.headers['Content-Type'] = 'text/csv'
+    return s.getvalue()
