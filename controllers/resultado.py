@@ -161,6 +161,9 @@ def reporte():
         tabla_resultado.append(dict(nro_lista=nro_lista, desc_lista=desc_lista, 
                                     votos=votos, porc=porc, 
                                     bancas_obtenidas=bancas_obtenidas))
+    # generar el chart
+    url = "http://chart.apis.google.com/chart?cht=p3&chd=t:60,40&chs=250x100&chl=Hello|World&.png"
+    chart = IMG(_src=url,_width="250",_height="100")
 
     # devuelvo los datos a la vista
     return dict(
@@ -176,6 +179,7 @@ def reporte():
         ubicacion=ubicacion,
         cargo=cargo,
         partido=partido,
+	chart=chart,
         )
 
 
