@@ -4,6 +4,36 @@ import os, uuid, cStringIO
 
 
 @auth.requires_login()
+
+def index():
+    # registros para paginaciòn
+    reg_por_pagina = 100
+    
+    # preparo ubicaciones a elegir: [(id_ubicacion, descripcion)] 
+    # solo provincias (para listar departamentos dentro de ellas)
+    prov = msa.ubicaciones.with_alias("provincia")
+    q = prov.clase=="Provincia"
+    ubicaciones = msa(q).select(prov.id_ubicacion, prov.descripcion )
+    ubicaciones = sorted([(row.id_ubicacion, row.descripcion) for row in ubicaciones],
+                         key= lambda x: x[1])
+
+    form = SQLFORM.factory(
+	Field("id_provincia", "string",
+	    label="Provincia",requires=IS_IN_SET(ubicaciones),
+	    default=session.id_provincia or None, ),
+        )
+           
+    if form.accepts(request.vars, session, keepvalues=True):
+        # formulario completado correctamente
+        # grabo en la sesión los datos del filtro (para paginación)
+        #session.id_ubicacion = form.vars.id_ubicacion.strip() 
+	pass
+    else:
+        # formulario mal completado o primera vez
+        ok = False
+        
+    return dict(form=form)
+
 def listado():
     # registros para paginaciòn
     reg_por_pagina = 100
