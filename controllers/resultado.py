@@ -170,8 +170,8 @@ def reporte():
         listas.append(lista['nro_lista'])
         porcentajes.append(lista['porc'][:-2])
      
-    url = "http://chart.apis.google.com/chart?cht=p&chd=t:"+','.join(porcentajes)+"&chs=250x100&chl="+'|'.join(listas)+"&.png"
-    chart = IMG(_src=url,_width="250",_height="100")
+    url = "http://chart.apis.google.com/chart?cht=p&chd=t:"+','.join(porcentajes)+"&chs=500x400&chl="+'|'.join(listas)+"&.png"
+    chart = IMG(_src=url,_width="500",_height="400")
 
     # devuelvo los datos a la vista
     return dict(
