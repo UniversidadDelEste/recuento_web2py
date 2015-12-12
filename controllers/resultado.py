@@ -341,6 +341,3 @@ def pdfreport():
         # prepare PDF to download:
         response.headers['Content-Type']='application/pdf'
         return pdf.output(dest='S')
-    else:
-        # normal html view:
-        return dict(chart=chart, table=table)
