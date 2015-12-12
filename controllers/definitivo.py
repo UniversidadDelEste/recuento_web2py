@@ -26,8 +26,9 @@ def index():
     if form.accepts(request.vars, session, keepvalues=True):
         # formulario completado correctamente
         # grabo en la sesión los datos del filtro (para paginación)
-        #session.id_ubicacion = form.vars.id_ubicacion.strip() 
-	pass
+        session.id_provincia = form.vars.id_provincia.strip() 
+##	pass
+	redirect(URL(f="listado"))
     else:
         # formulario mal completado o primera vez
         ok = False
@@ -44,6 +45,8 @@ def listado():
     prov = msa.ubicaciones.with_alias("provincia")
     q = dpto.clase=="Departamento"
     q &= dpto.id_ubicacion_padre == prov.id_ubicacion
+    if session.id_provincia:
+	q &= prov.id_ubicacion == session.id_provincia
     ubicaciones = msa(q).select(dpto.id_ubicacion, dpto.descripcion, prov.descripcion.with_alias("provincia"))
     ubicaciones = sorted([(row.ubicaciones.id_ubicacion, "%s (%s)" % (row.ubicaciones.descripcion, row.provincia)) for row in ubicaciones],
                          key= lambda x: x[1])
