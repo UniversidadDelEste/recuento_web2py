@@ -33,3 +33,15 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# tomado de hgitignore
+app_settings_private.py
+databases/*
+sessions/*
+errors/*
+cache/*
+private/*
+uploads/*
+static/slideshow/*
+static/docs/*
+
