@@ -1,5 +1,6 @@
 # coding: utf8
 import StringIO
+import csv
 
 COLORES = """000033	000066	000099	0000CC	0000FF
 003300	003333	003366	003399	0033CC	0033FF
@@ -243,8 +244,8 @@ def reporte():
         ubicacion=ubicacion,
         cargo=cargo,
         partido=partido,
-	chart=chart,
-	my_args=request.args
+    chart=chart,
+    my_args=request.args
         )
 
 
@@ -334,8 +335,65 @@ def calcula_dhont_electos(votos, total, piso, bancas, candidatos=None):
 
 def exportar():
     data=reporte()
-    rows = data['tabla_resultado']
     s = StringIO.StringIO()
-    rows.export_to_csv_file(s)
+    rows = data['tabla_resultado']
+    
+    writer = csv.writer(s, dialect='excel')
+    headers=["nro_lista","descripcion","votos","porc","bancas_obtenidas"]
+    writer.writerow(headers)    
+    for fila in data['tabla_resultado']:
+        writer.writerow([fila['nro_lista'],
+                fila['desc_lista'],
+                fila['votos'],
+                fila['porc'],
+                fila['bancas_obtenidas']])
+
     response.headers['Content-Type'] = 'text/csv'
     return s.getvalue()
+
+def pdfreport():
+    response.title = "web2py sample report"
+    
+    # include a google chart!
+    url = "http://chart.apis.google.com/chart?cht=p3&chd=t:60,40&chs=250x100&chl=Hello|World&.png"
+    chart = IMG(_src=url, _width="250",_height="100")
+
+    # create a small table with some data:
+    data=reporte()
+    items=data['tabla_resultado']
+    rows = [THEAD(TR(TH("Nro",_width="30%"), TH("Lista",_width="50%"))),
+            TBODY(*[
+                  TR(TD(item["nro_lista"]),TD(item["desc_lista"])) 
+                    for item in items]
+                 )]
+
+    table = TABLE(*rows, _border="1", _align="center", _width="50%")
+    if not request.extension=="pdf":
+        from gluon.contrib.pyfpdf import FPDF, HTMLMixin
+
+        # create a custom class with the required functionalities 
+        class MyFPDF(FPDF, HTMLMixin):
+            def header(self): 
+                "hook to draw custom page header"
+                #logo=os.path.join(request.env.web2py_path,"applications",request.application,"private","tutorial","logo_pb.png")
+                #self.image(logo,10,8,33)
+                self.set_font('Arial','B',15)
+                self.cell(65) # padding
+                self.cell(60,10,response.title,1,0,'C')
+                self.ln(20)
+                
+            def footer(self):
+                "hook to draw custom page header (printing page numbers)"
+                self.set_y(-15)
+                self.set_font('Arial','I',8)
+                txt = 'Page %s of %s' % (self.page_no(), self.alias_nb_pages())
+                self.cell(0,10,txt,0,0,'C')
+                    
+        pdf=MyFPDF()
+        # create a page and serialize/render HTML objects
+        pdf.add_page()
+        pdf.write_html(str(XML(table, sanitize=False)))
+        pdf.write_html(str(XML(CENTER(chart), sanitize=False)))
+        # prepare PDF to download:
+        response.headers['Content-Type']='application/pdf'
+        return pdf.output(dest='S')
