@@ -3,7 +3,7 @@
 import os, uuid, cStringIO
 
 
-##@auth.requires_login()
+@auth.requires_login()
 def listado():
     # registros para paginaciòn
     reg_por_pagina = 100
@@ -76,7 +76,7 @@ def listado():
         table = pagina = paginas = None
     return dict(form=form, table=table, pagina=pagina, paginas=paginas)
 
-
+@auth.requires_membership(role="carga")
 def cargar():
     "Página para cargar votos (miniatura de la planilla y campos entrada)"
     # obtengo el parámetro pasado por variable en la url

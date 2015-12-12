@@ -111,4 +111,4 @@ msa.define_table('candidatos',
     Field('sexo', type='string', length=1),
     Field('idx_fila', type='integer'),
     Field('categoria', type='text'),
-    migrate=True)
+    migrate=migrate)
