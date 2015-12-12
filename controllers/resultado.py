@@ -162,7 +162,14 @@ def reporte():
                                     votos=votos, porc=porc, 
                                     bancas_obtenidas=bancas_obtenidas))
     # generar el chart
-    url = "http://chart.apis.google.com/chart?cht=p3&chd=t:60,40&chs=250x100&chl=Hello|World&.png"
+    listas = []
+    porcentajes= []
+
+    for lista in tabla_resultado:
+        listas.append(lista['nro_lista'])
+        porcentajes.append(lista['porc'][:-2])
+     
+    url = "http://chart.apis.google.com/chart?cht=p&chd=t:"+','.join(porcentajes)+"&chs=250x100&chl="+'|'.join(listas)+"&.png"
     chart = IMG(_src=url,_width="250",_height="100")
 
     # devuelvo los datos a la vista
