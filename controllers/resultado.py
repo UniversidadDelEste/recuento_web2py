@@ -1,5 +1,6 @@
 # coding: utf8
 import StringIO
+import csv
 
 def index():
     "Página inical de búsqueda"
@@ -187,8 +188,8 @@ def reporte():
         ubicacion=ubicacion,
         cargo=cargo,
         partido=partido,
-	chart=chart,
-	my_args=request.args
+    chart=chart,
+    my_args=request.args
         )
 
 
@@ -278,8 +279,18 @@ def calcula_dhont_electos(votos, total, piso, bancas, candidatos=None):
 
 def exportar():
     data=reporte()
-    rows = data['tabla_resultado']
     s = StringIO.StringIO()
-    rows.export_to_csv_file(s)
+    rows = data['tabla_resultado']
+    
+    writer = csv.writer(s, dialect='excel')
+    headers=["nro_lista","descripcion","votos","porc","bancas_obtenidas"]
+    writer.writerow(headers)    
+    for fila in data['tabla_resultado']:
+        writer.writerow([fila['nro_lista'],
+                fila['desc_lista'],
+                fila['votos'],
+                fila['porc'],
+                fila['bancas_obtenidas']])
+
     response.headers['Content-Type'] = 'text/csv'
     return s.getvalue()
