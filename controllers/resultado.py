@@ -360,10 +360,21 @@ def pdfreport():
 
     # create a small table with some data:
     data=reporte()
-    items=data['tabla_resultado']
+    items=sorted(data['tabla_resultado'])
     pdfchart = data['chart']
-    rows = [THEAD(TR(TH("Lista",_width="10%"), TH(" ",_width="60%"), TH("Votos",_width="10%"), TH("Porc.",_width="10%"), TH("Bancas",_width="10%"))),TBODY(*[TR(TD(item["nro_lista"]),TD(item["desc_lista"]),TD(item["votos"]),TD(item["porc"]),TD(item["bancas_obtenidas"]) ) for item in items])]
-    table = TABLE(*rows, _border="0", _width="100%")
+    rows = [THEAD(TR(TH("Lista",_width="10%"), 
+                     TH(" ",_width="60%"), 
+                     TH("Votos",_width="10%"), 
+                     TH("Porc.",_width="10%"), 
+                     TH("Bancas",_width="10%"),_bgcolor="#A0A0A0")),
+            TBODY(*[TR(TD(item["nro_lista"]),
+                       TD(item["desc_lista"]),
+                       TD(item["votos"]),TD(item["porc"]),
+                       TD(item["bancas_obtenidas"]) ) 
+                    
+                    for item in items])]
+    
+    table = TABLE(*rows, _border="0", _width="100%", _class="table table-striped")
     if not request.extension=="pdf":
         from gluon.contrib.pyfpdf import FPDF, HTMLMixin
 
@@ -376,15 +387,14 @@ def pdfreport():
                 self.set_font('Arial','B',15)
                 self.cell(65) # padding
                 self.cell(60,10,response.title,1,0,'C')
-                self.ln(20)
+                #self.ln(20)
                 
             def footer(self):
                 "hook to draw custom page header (printing page numbers)"
                 self.set_y(-15)
                 self.set_font('Arial','I',8)
                 txt = 'Page %s of %s' % (self.page_no(), self.alias_nb_pages())
-                self.cell(0,10,txt,0,0,'C')
-                    
+                self.cell(0,10,txt,0,0,'C')             
         pdf=MyFPDF()
         # create a page and serialize/render HTML objects
         pdf.add_page()
