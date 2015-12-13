@@ -361,6 +361,7 @@ def pdfreport():
     # create a small table with some data:
     data=reporte()
     items=data['tabla_resultado']
+    pdfchart = data['chart']
     rows = [THEAD(TR(TH("Lista",_width="10%"), TH(" ",_width="60%"), TH("Votos",_width="10%"), TH("Porc.",_width="10%"), TH("Bancas",_width="10%"))),TBODY(*[TR(TD(item["nro_lista"]),TD(item["desc_lista"]),TD(item["votos"]),TD(item["porc"]),TD(item["bancas_obtenidas"]) ) for item in items])]
     table = TABLE(*rows, _border="0", _width="100%")
     if not request.extension=="pdf":
@@ -388,6 +389,7 @@ def pdfreport():
         # create a page and serialize/render HTML objects
         pdf.add_page()
         pdf.write_html(str(XML(table, sanitize=False)))
+        pdf.write_html(str(XML(CENTER(pdfchart), sanitize=False)))
         # prepare PDF to download:
         response.headers['Content-Type']='application/pdf'
         return pdf.output(dest='S')
