@@ -352,7 +352,7 @@ def exportar():
     return s.getvalue()
 
 def pdfreport():
-    response.title = "web2py sample report"
+    #response.title = "web2py sample report"
     
     # include a google chart!
     url = "http://chart.apis.google.com/chart?cht=p3&chd=t:60,40&chs=250x100&chl=Hello|World&.png"
@@ -361,13 +361,8 @@ def pdfreport():
     # create a small table with some data:
     data=reporte()
     items=data['tabla_resultado']
-    rows = [THEAD(TR(TH("Nro",_width="30%"), TH("Lista",_width="50%"))),
-            TBODY(*[
-                  TR(TD(item["nro_lista"]),TD(item["desc_lista"])) 
-                    for item in items]
-                 )]
-
-    table = TABLE(*rows, _border="1", _align="center", _width="50%")
+    rows = [THEAD(TR(TH("Lista",_width="10%"), TH(" ",_width="60%"), TH("Votos",_width="10%"), TH("Porc.",_width="10%"), TH("Bancas",_width="10%"))),TBODY(*[TR(TD(item["nro_lista"]),TD(item["desc_lista"]),TD(item["votos"]),TD(item["porc"]),TD(item["bancas_obtenidas"]) ) for item in items])]
+    table = TABLE(*rows, _border="0", _width="100%")
     if not request.extension=="pdf":
         from gluon.contrib.pyfpdf import FPDF, HTMLMixin
 
@@ -393,7 +388,6 @@ def pdfreport():
         # create a page and serialize/render HTML objects
         pdf.add_page()
         pdf.write_html(str(XML(table, sanitize=False)))
-        pdf.write_html(str(XML(CENTER(chart), sanitize=False)))
         # prepare PDF to download:
         response.headers['Content-Type']='application/pdf'
         return pdf.output(dest='S')
