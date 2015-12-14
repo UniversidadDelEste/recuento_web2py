@@ -31,15 +31,16 @@ def index():
     else:
         # formulario mal completado o primera vez
         ok = False
-        
+       
     return dict(form=form)
 
+#def index():
 def filtro2():
     "Página inical de búsqueda"
     # preparo ubicaciones a elegir: [(id_ubicacion, descripcion)]
     q = msa.ubicaciones.clase.contains(["Pais", "Departamento", "Provincia"])
     if session.id_provincia:
-    	q &= ubicaciones.id_ubicacion_padre == session.id_ubicacion
+    	q &= msa.ubicaciones.id_ubicacion_padre == session.id_provincia
 
     ubicaciones = msa(q).select()
     
