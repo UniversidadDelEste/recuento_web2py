@@ -35,7 +35,7 @@ nosetests.xml
 .pydevproject
 
 # tomado de hgitignore
-app_settings_private.py
+app_settings_privates.py
 databases/*
 sessions/*
 errors/*
@@ -44,4 +44,5 @@ private/*
 uploads/*
 static/slideshow/*
 static/docs/*
-
+*.bak
+*.log
