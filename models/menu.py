@@ -19,7 +19,10 @@ response.menu = [
     (T('Index'), False, URL(request.application,'default','index'), []),
     (T('Consultas'), False, URL(request.application,'definitivo','index'), []),
     (T('Resultado'), False, URL(request.application,'resultado','index'), []),
-    (T('Subir Telegrama'), False, URL(request.application, 'telegrama','subir'), []),
+    (T('Subir Telegrama'), False, URL(request.application, '',''), [
+        (T('Version 1'), False, URL(request.application, 'telegrama','subir'), []),
+    (T('Version 2'), False, URL(request.application, 'telegrama2','index'), []),
+        ]),
     ]
 
 ##########################################
