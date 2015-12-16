@@ -242,6 +242,7 @@
 'logout': 'fin de sesión',
 'Logout': 'Fin de sesión',
 'Lost Password': 'Contraseña perdida',
+'lost password': 'lost password',
 'Lost password?': '¿Olvidó la contraseña?',
 'lost password?': '¿olvidó la contraseña?',
 'Main Menu': 'Menú principal',
