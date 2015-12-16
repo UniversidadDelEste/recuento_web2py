@@ -8,4 +8,4 @@ SUBTITULO = " - ".join(["Elecciones Nacionales",
                         "Argentina", "11 de Agosto 2015"])
 
 # cadena de conexion a base principal:
-PG_CNNSTR = "postgres://reingart:clave@localhost/recuento"
+PG_CNNSTR = "postgres://postgres:fasca@localhost/recuento"

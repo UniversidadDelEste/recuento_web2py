@@ -165,7 +165,7 @@ def cargar():
                     and INPUT(requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,400)),
                               _name='voto.%s.%s' % (cargo.id_cargo, lista.id_lista), 
                               _value=detalles.get((cargo.id_cargo, lista.id_lista), ""), 
-                              _size="3", _style="width: 30px;")
+                              _size="3", _style="width: 30px; text-align:right;")
                     or "") 
                     for cargo in cargos],
             )])
@@ -173,7 +173,7 @@ def cargar():
                                                _style="text-align: center;")))
     
     # armo el formulario
-    form = FORM(TABLE(fields, _class="compacta", _width="100%", 
+    form = FORM(TABLE(fields, _class="table table-hover", _width="100%", 
                               _cellpadding="0", _cellspacing="0", 
                               _style="padding: 0; margin: 0;"), 
                       _style="padding: 0; margin: 0;")
