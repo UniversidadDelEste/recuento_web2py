@@ -145,6 +145,9 @@ def cargar():
     cargos = msa().select(msa.cargos.ALL)
     cargos = sorted([c for c in cargos if c.id_cargo in id_cargos], key=lambda x: x.idx_col)
 
+    #creo un diccionario para guardar los totales por cargo
+    totales = {}
+
     # encabezado de la tabla:
     fields = [TR(
                 TD(A(IMG(_src=URL('thumbnail',args=id_planilla)), 
@@ -169,6 +172,13 @@ def cargar():
                     or "") 
                     for cargo in cargos],
             )])
+        for cargo in cargos:
+			if cargo in totales:
+				totales[cargo] += detalles.get((cargo.id_cargo, lista.id_lista), 0)
+			else:
+				totales[cargo] = detalles.get((cargo.id_cargo, lista.id_lista), 0)
+            
+    fields.append(TR(TD(),TD(),TD(B('Totales'),_class="text-right"),[TD(B(k[1])) for k in totales.iteritems()],_class="info"))
     fields.append(TR(TD(INPUT(_type="submit"), _colspan=3+len(id_cargos), 
                                                _style="text-align: center;")))
     
@@ -178,33 +188,60 @@ def cargar():
                               _style="padding: 0; margin: 0;"), 
                       _style="padding: 0; margin: 0;")
 
+    totales = {}
     # valido el formulario:
     if form.accepts(request.vars, session):
-        # recorro los campos del formulario y guardo:
-        for var in form.vars.keys():
-            if "." in var:
-                # divido el nombre del campo (ver INPUT)
-                n, id_cargo, id_lista = var.split(".")  
-                # obtengo el valor ingresado para este campo
-                val = form.vars[var]
-                # busco el registro actual para actualizarlo (si existe)
-                q  = msa.planillas_det.id_planilla==planilla.id_planilla
-                q &= msa.planillas_det.id_cargo==id_cargo
-                q &= msa.planillas_det.id_lista==id_lista
-                # actualizao el registro (si no existe devuelve 0 filas)
-                affected = msa(q).update(votos_definitivos=val)
-                if not affected:                                    
-                    # inserto el registro ya que no existe
-                    msa.planillas_det.insert(
-                        id_planilla=planilla.id_planilla,
-                        id_cargo=id_cargo, id_lista=id_lista,
-                        votos_definitivos=val)
-        # marco la planilla como definitivo
-        msa(msa.planillas.id_planilla==planilla.id_planilla).update(definitivo=True)
-        # mesnaje para el usuario y redirijo al listado
-        session.flash = "Planilla %s (%s %s) aceptada!" % ( 
-                         id_planilla, ubicacion.clase, ubicacion.descripcion)
-        redirect(URL("listado"))
+		#hago un try para poder trabajar con transacciones
+		try:
+			# recorro los campos del formulario y guardo:
+			for var in form.vars.keys():
+				if "." in var:
+					# divido el nombre del campo (ver INPUT)
+					n, id_cargo, id_lista = var.split(".")  
+					# obtengo el valor ingresado para este campo
+					val = form.vars[var]
+					# busco el registro actual para actualizarlo (si existe)
+					q  = msa.planillas_det.id_planilla==planilla.id_planilla
+					q &= msa.planillas_det.id_cargo==id_cargo
+					q &= msa.planillas_det.id_lista==id_lista
+					# actualizao el registro (si no existe devuelve 0 filas)
+					affected = msa(q).update(votos_definitivos=val)
+					
+					if id_cargo in totales:
+						totales[id_cargo] += val
+					else:
+						totales[id_cargo] = val
+					if not affected:                                    
+						# inserto el registro ya que no existe
+						msa.planillas_det.insert(
+							id_planilla=planilla.id_planilla,
+							id_cargo=id_cargo, id_lista=id_lista,
+							votos_definitivos=val)
+			# marco la planilla como definitivo
+			msa(msa.planillas.id_planilla==planilla.id_planilla).update(definitivo=True)
+			# mesnaje para el usuario y redirijo al listado
+			session.flash = "Planilla %s (%s %s) aceptada!" % ( 
+							 id_planilla, ubicacion.clase, ubicacion.descripcion)
+		except:
+			pass
+		finally:
+			#controlo los totales, en caso de que no coincidan hago un rollback
+			valor = None
+			graba = True
+			for k, v in totales.iteritems():
+				if valor is None:
+					valor = v
+				else:
+					if valor != v:
+						msa.rollback()
+						graba = False
+			#si me da como para que grabe hago un commit si no un rollback			
+			if graba:
+				msa.commit()
+				redirect(URL("listado"))
+			else:
+				response.flash = "Planilla no coinciden los totales de los cargos"
+
     elif form.errors:
         response.flash = 'revise los errores!'
 
