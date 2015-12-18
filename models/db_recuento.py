@@ -112,3 +112,6 @@ msa.define_table('candidatos',
     Field('idx_fila', type='integer'),
     Field('categoria', type='text'),
     migrate=migrate)
+
+msa.listas.id_partido.represent = lambda id_partido, row: (msa.partidos(id_partido).descripcion)
+msa.listas.id_partido.requires = IS_IN_DB(msa, msa.partidos.id_partido, '%(descripcion)s')
