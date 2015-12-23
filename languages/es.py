@@ -216,6 +216,7 @@
 'HTML': 'HTML',
 'HTML export of visible columns': 'HTML export of visible columns',
 'htmledit': 'htmledit',
+'Id': 'Id',
 'Id Lista': 'Id Lista',
 'Id Partido': 'Id Partido',
 'Idx Fila': 'Idx Fila',
