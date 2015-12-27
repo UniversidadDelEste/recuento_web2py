@@ -22,11 +22,7 @@ response.menu = [
     (T('Subir Telegrama'), False, URL(request.application, '',''), [
         (T('Version 1'), False, URL(request.application, 'telegrama','subir'), []),
     (T('Version 2'), False, URL(request.application, 'telegrama2','index'), []),
-        ]),
-    (T('ABM'), False, URL(request.application, '',''), [
-        (T('Partidos Politicos'), False, URL(request.application, 'abm','partidos'), []),
-        (T('Listas'), False, URL(request.application, 'abm','listas'), []),
-        ]),
+       ]),
     ]
 
 ##########################################
