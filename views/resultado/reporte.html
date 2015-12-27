@@ -1,6 +1,15 @@
 {{extend 'layout.html'}}
+            
+    
+     
 <h1 class="bg-primary">Reportes</h1>
 <h2>Ubicación: {{=B(ubicacion.descripcion)}}</h2>
+<div class="col-md-3">
+            <h3>Ayuda Reporte (II)</h3> <!--Nombre de la columna-->
+            <p></p>
+             Seleccione la ubicación (provincia) del cuadro desplegable
+      {{pass}}
+    </div>
 <h2>Cargo: {{=B(cargo.descripcion)}}</h2>
 <h3>Resultado</h3>
 <table class="table table-striped">
@@ -36,8 +45,7 @@
 <li><b>Bancas D'Hont: {{=B(dhont_bancas)}}</li>
 <li><b>Piso D'Hont: {{=B(dhont_piso)}}</li>
 </ul>
-
-
+ {
 <h3>Grafico</h3>
 {{=chart}}
 <br>

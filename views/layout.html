@@ -94,8 +94,23 @@
       {{if right_sidebar_enabled:}}
         <div class="col-md-3">
             {{block right_sidebar}}
-            <h3>Right Sidebar</h3>
+            <h3>Ayuda Inicial</h3> <!--Nombre de la columna-->
             <p></p>
+            {{end}}
+            <div class="sidebar">
+            {{block ayuda1}}
+                Seleccione del menú, la opción que desee ejecutar.<br>
+                <b>Consulta</b>: Deberá tener en cuenta la ubicación (provincia y partido) para poder ver los contenidos.<br>
+                <b>Resultado</b>: Seleccione 1° la ubicación (provincia)<br>
+                2° el partido (municipio), el cargo electivo (Presidente, Senador o Diputado -nacional-, Gobernador o Autoridad municipal)<br>
+                Y 3° el estado de la carga de datos.<br>
+                <b>Subir Telegrama</b>: Tiene 2 opciones:
+                <ul>
+                <li>Versión 1:</li> Subida de los telegramas rápida
+                <li>Versión 2:</li> Subir indicando las ubicaciones de la mesa/telegrama
+                    
+                </ul>
+                
             {{end}}
         </div>
       {{pass}}

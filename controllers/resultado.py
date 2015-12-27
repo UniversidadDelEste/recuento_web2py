@@ -36,7 +36,7 @@ def index():
 
 #def index():
 def filtro2():
-    "Página inical de búsqueda"
+    "Página inicial de búsqueda"
     # preparo ubicaciones a elegir: [(id_ubicacion, descripcion)]
     q = msa.ubicaciones.clase.contains(["Pais", "Departamento", "Provincia"])
     if session.id_provincia:
