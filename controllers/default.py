@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-
+import json
 #########################################################################
 ## This is a samples controller
 ## - index is the default action of any application
@@ -13,10 +13,21 @@ def index():
     example action using the internationalization operator T and flash
     rendered by views/default/index.html or views/generic.html
     """
-    response.flash = T('Welcome to web2py')
-    return dict(message=T('Hello World'))
+    form=None
+    msg=request.application.replace('_',' ').title()
+    if request.vars.titulo:
+        with open('titulos.json', 'w') as f:
+            data={'Titulos':
+                {'titulo':request.vars.titulo,
+                'subtitulo':request.vars.subtitulo}}
+            json.dump(data,f,indent=4)
+        response.flash = 'Tengo el titulo'
+        session.titulo = request.vars.titulo
+    else:
+        response.flash = msg
+    return dict(form=form)
 
-
+   
 def user():
     """
     exposes:
@@ -51,4 +62,3 @@ def call():
     """
     session.forget()
     return service()
-

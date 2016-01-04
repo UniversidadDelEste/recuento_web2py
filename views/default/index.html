@@ -3,6 +3,27 @@
 {{extend 'layout.html'}}
 
 <hr />
+{{import os,json}}
+{{if not os.path.exists('titulos.json'):}}
+Titulo y subtitulo
+<form >
+  <input name="titulo" />
+  <input name="subtitulo" />
+  <input type="submit" />
+</form>
+{{else:}}
+{{with open('titulos.json', 'r') as f:}}
+{{data=json.load(f)}}
+
+<h1>
+    {{=data['Titulos']['titulo']}}
+</h1>
+<h2>
+    {{=data['Titulos']['subtitulo']}}
+</h2>
+{{pass}}
+{{pass}}
+
 <h2>Bienvenido a la aplicación de recuento</h2>
 En este sitio es posible realizar:
 <ul>
