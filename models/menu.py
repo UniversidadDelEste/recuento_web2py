@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
+import manage_settings
 
 #########################################################################
 ## Customize your APP title, subtitle and menus here
@@ -15,7 +16,7 @@ response.meta.keywords = 'elecciones recuento resultado carga definitivo'
 ## add/remove items as required
 ##########################################
 
-response.menu = [
+menu_options = [
     (T('Index'), False, URL(request.application,'default','index'), []),
     (T('Consultas'), False, URL(request.application,'definitivo','index'), []),
     (T('Resultado'), False, URL(request.application,'resultado','index'), []),
@@ -37,9 +38,10 @@ response.menu = [
 ## mind that plugins may also affect menu
 ##########################################
 
-response.menu+=[
+menu_options+=[
     (T('Admin'), False, URL('admin', 'default', 'design/%s' % request.application),
      [
+            (T('Setup'), False, URL(request.application, 'setup','index'), []),
             (T('Configuración'), False, 
              URL('admin', 'default', 'edit/%s/models/app_settings.py' \
                      % (request.application,))), 
@@ -48,3 +50,4 @@ response.menu+=[
             ]
    ),
   ]
+response.menu=manage_settings.filter_menu(menu_options)

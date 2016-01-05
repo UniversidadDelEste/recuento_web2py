@@ -13,19 +13,9 @@ def index():
     example action using the internationalization operator T and flash
     rendered by views/default/index.html or views/generic.html
     """
-    form=None
     msg=request.application.replace('_',' ').title()
-    if request.vars.titulo:
-        with open('titulos.json', 'w') as f:
-            data={'Titulos':
-                {'titulo':request.vars.titulo,
-                'subtitulo':request.vars.subtitulo}}
-            json.dump(data,f,indent=4)
-        response.flash = 'Tengo el titulo'
-        session.titulo = request.vars.titulo
-    else:
-        response.flash = msg
-    return dict(form=form)
+    response.flash = msg
+    return dict()
 
    
 def user():
