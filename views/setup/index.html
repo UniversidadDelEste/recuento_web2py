@@ -1,0 +1,23 @@
+{{extend 'layout.html'}}
+<h1>Configuración de la aplicación</h1>
+<form>
+  <fieldset>
+      <legend>Titulos elección:</legend>
+      {{for key in ['TITULO','SUBTITULO','FECHA','LUGAR']:}}
+  <p>{{=key.title()}}
+      <input name="{{=key}}" value="{{=vars[key]}}"/>
+  </p>
+  {{pass}} {{pass}}
+      
+  </fieldset>
+  <fieldset>
+      <legend>Características habilitadas:</legend>
+          {{for item in vars['caracteristicas']:}}
+              {{state=''}}
+              {{if item not in INHABILITADOS:state='checked'}}
+            <p><input type="checkbox" name="{{=item}}" {{=state}}>{{=item}}</p>
+          {{pass}}
+  </fieldset>
+  <input type="submit" />
+</form>
+{{=BEAUTIFY(request.vars)}}
